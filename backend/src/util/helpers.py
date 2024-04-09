@@ -1,6 +1,7 @@
 from src.controllers.usercontroller import UserController
 from src.util.dao import DAO
 import random
+import re
 
 def hasAttribute(obj: dict, attribute: str):
     """Check whether a given dict contains a specific attribute
@@ -15,6 +16,9 @@ def hasAttribute(obj: dict, attribute: str):
     """
     return (attribute in obj)
 
+
+
+    return True
 class ValidationHelper:
     def __init__(self, usercontroller: UserController):
         self.usercontroller = usercontroller
@@ -37,6 +41,26 @@ class ValidationHelper:
         if user['age'] > 18:
             return "valid"
         return "underaged"
+    
+    def validateEmail(self, email: str):
+        """Validate an email address based on if it's in the correct format or not.
+
+            attributes:
+            email -- an email address string
+
+            returns:
+            True -- if the email address is valid
+            False -- if the email address is not valid.
+            """
+
+        try:
+            # Call the usercontroller to validate the email
+            return self.usercontroller.validateEmail(email)
+        except ValueError as ve:
+            # Re-raise ValueError raised by usercontroller
+            raise ValueError(f"Error in usercontroller: {ve}")
+
+            
 
 class ValidationHelper2:
     def __init__(self):
