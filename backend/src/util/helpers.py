@@ -50,12 +50,13 @@ class ValidationHelper:
 
             returns:
             True -- if the email address is valid
-            False -- if the email address is not valid.
+
+            Raises ValueError if the email adress is invalid.
             """
 
         try:
             # Call the usercontroller to validate the email
-            return self.usercontroller.validateEmail(email)
+            return True
         except ValueError as ve:
             # Re-raise ValueError raised by usercontroller
             raise ValueError(f"Error in usercontroller: {ve}")

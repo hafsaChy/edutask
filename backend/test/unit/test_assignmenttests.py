@@ -27,5 +27,13 @@ def test_get_user_by_email_exceptions_mail(email="examplename.lastname@example.c
               mock_dao = MagicMock()
               user_controller_instance = UserController(mock_dao)
               assert user_controller_instance.get_user_by_email(email)
+
+def test_get_user_by_email_database_fail(email = "examplename.lastname@example.com"):
+       mockedDAO = MagicMock()
+       mockedDAO.find.side_effect = Exception()
+       ucinstance = UserController(dao=mockedDAO)
+       with pytest.raises(Exception):
+              ucinstance.get_user_by_email(email)
+       
     
 
