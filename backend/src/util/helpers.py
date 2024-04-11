@@ -42,24 +42,6 @@ class ValidationHelper:
             return "valid"
         return "underaged"
     
-    def validateEmail(self, email: str):
-        """Validate an email address based on if it's in the correct format or not.
-
-            attributes:
-            email -- an email address string
-
-            returns:
-            True -- if the email address is valid
-
-            Raises ValueError if the email adress is invalid.
-            """
-
-        try:
-            # Call the usercontroller to validate the email
-            return True
-        except ValueError as ve:
-            # Re-raise ValueError raised by usercontroller
-            raise ValueError(f"Error in usercontroller: {ve}")
 
             
 
