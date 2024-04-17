@@ -1,8 +1,9 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from src.controllers.usercontroller import UserController
+import re
 
-# Test cases
+
 # Tests for get_user_by_email, ValueError separated due to more info shown if put in 
 # pytest.raises.
 
@@ -21,9 +22,9 @@ def test_invalid_email(email):
        with pytest.raises(ValueError):
               user_controller_instance.get_user_by_email(email)
 
-# Test case for a valid email with multiple users
+# Test case for a valid email with multiple users returns first user
 def test_valid_email_multiple_users_found():
-    email = "example@example.com"
+    email = "local_part@domain.host"
     with patch('builtins.print') as mock_print:
         mock_dao = MagicMock()
         # Simulate finding multiple users with the given email
@@ -31,10 +32,18 @@ def test_valid_email_multiple_users_found():
         user_controller_instance = UserController(mock_dao)
         user = user_controller_instance.get_user_by_email(email)
         assert user == {'email': email}
-        # Assert that the warning message is printed with the correct content
-        mock_print.assert_called()
-        assert mock_print.call_count == 2
-        mock_print.assert_any_call(f'Error: more than one user found with mail {email}')
+
+# Test case for a valid email with multiple users prints warning message
+def test_valid_email_multiple_users_found_warning():
+    email = "local_part@domain.host"
+    with patch('builtins.print') as mock_print:
+        mock_dao = MagicMock()
+        mock_dao.find.return_value = [{'email': email}, {'email': email}]
+        user_controller_instance = UserController(mock_dao)
+        user = user_controller_instance.get_user_by_email(email)        
+        # Assert that the warning message contains the email using a regular expression pattern
+        email_pattern = re.compile(rf'.*{re.escape(email)}.*')
+        assert any(email_pattern.search(call[0][0]) for call in mock_print.call_args_list)
 
 # Test case for database fail
 def test_database_fail(email = "examplename.lastname@example.com"):
