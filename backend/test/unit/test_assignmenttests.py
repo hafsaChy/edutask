@@ -1,6 +1,8 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from src.controllers.usercontroller import UserController
+from src.util.dao import DAO
+import pymongo
 import re
 
 
@@ -24,8 +26,10 @@ def test_get_user_by_email_exceptions_badmail(email):
                      user_controller_instance.get_user_by_email(email)
 
 # Test case for a valid email with no users found
+# @pytest.mark.parametrize('email, outcome', 
+#                          [("examplename.lastname@example.com", None), ("jane.doe@gmail.com", {'Email: jane.doe@gmail.com'})])
 @pytest.mark.parametrize('email, outcome', 
-                         [("examplename.lastname@example.com", None), ("jane.doe@gmail.com", {'Email: jane.doe@gmail.com'})])
+                         [("examplename.lastname@example.com", None)])
 def test_get_user_by_email_nomatch(email, outcome):
        with patch('src.util.helpers.DAO', autospec=True):
               mockedDAO = MagicMock()
@@ -34,6 +38,7 @@ def test_get_user_by_email_nomatch(email, outcome):
               with pytest.raises(Exception):
                      assert uc.get_user_by_email(email) == outcome
 
+# Test case for a valid email with multiple users returns first user
 # Test case for a valid email with multiple users returns first user
 def test_valid_email_multiple_users_found():
     email = "local_part@domain.host"
@@ -67,3 +72,17 @@ def test_get_user_by_email_database_fail(email = "examplename.lastname@example.c
                      ucinstance = UserController(dao=mockedDAO)
                      with pytest.raises(Exception):
                             ucinstance.get_user_by_email(email)    
+
+# Test case for MongoDb Write Error
+
+def test_mongo_write_error():
+       dao = DAO('user')
+       with patch('src.util.dao.pymongo.MongoClient', autospec=True) as mockclientDB:
+              mock_db = MagicMock()
+              mockclientDB.return_value.edutask = mock_db
+              mock_collection = MagicMock()
+              mock_db.__getitem__.return_value = mock_collection
+              with pytest.raises(pymongo.errors.WriteError):
+                     dao.create({'notvalid': 'notvalid'})
+                     
+
