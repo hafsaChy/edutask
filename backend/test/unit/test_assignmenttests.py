@@ -26,10 +26,8 @@ def test_get_user_by_email_exceptions_badmail(email):
                      user_controller_instance.get_user_by_email(email)
 
 # Test case for a valid email with no users found
-# @pytest.mark.parametrize('email, outcome', 
-#                          [("examplename.lastname@example.com", None), ("jane.doe@gmail.com", {'Email: jane.doe@gmail.com'})])
 @pytest.mark.parametrize('email, outcome', 
-                         [("examplename.lastname@example.com", None)])
+                         [("examplename.lastname@example.com", None), ("jane.doe@gmail.com", {'Email: jane.doe@gmail.com'})])
 def test_get_user_by_email_nomatch(email, outcome):
        with patch('src.util.helpers.DAO', autospec=True):
               mockedDAO = MagicMock()
@@ -38,7 +36,6 @@ def test_get_user_by_email_nomatch(email, outcome):
               with pytest.raises(Exception):
                      assert uc.get_user_by_email(email) == outcome
 
-# Test case for a valid email with multiple users returns first user
 # Test case for a valid email with multiple users returns first user
 def test_valid_email_multiple_users_found():
     email = "local_part@domain.host"
@@ -85,4 +82,3 @@ def test_mongo_write_error():
               with pytest.raises(pymongo.errors.WriteError):
                      dao.create({'notvalid': 'notvalid'})
                      
-
