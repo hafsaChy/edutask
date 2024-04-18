@@ -75,6 +75,8 @@ def test_get_user_by_email_database_fail(email = "examplename.lastname@example.c
 
 # Test case for MongoDb Write Error
 
+
+
 def test_mongo_write_error():
        dao = DAO('user')
        with patch('src.util.dao.pymongo.MongoClient', autospec=True) as mockclientDB:
@@ -85,4 +87,15 @@ def test_mongo_write_error():
               with pytest.raises(pymongo.errors.WriteError):
                      dao.create({'notvalid': 'notvalid'})
                      
+
+def test_mongo_write():
+       dao = DAO('user')
+       with patch('src.util.dao.pymongo.MongoClient', autospec=True) as mockclientDB:
+              mock_db = MagicMock()
+              mockclientDB.return_value.edutask = mock_db
+              mock_collection = MagicMock()
+              mock_db.__getitem__.return_value = mock_collection
+              assert dao.create({'firstName': 'example', 'lastName': 'example','email': 'example.adress@example.com'})
+                     
+
 
