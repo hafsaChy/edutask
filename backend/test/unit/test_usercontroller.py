@@ -84,15 +84,23 @@ def test_invalid_email(email):
                      user_controller_instance.get_user_by_email(email)
 
 # Test case for a valid email with no user found
-@pytest.mark.parametrize('email, outcome', 
-                         [("examplename.lastname@example.com", None)])
-def test_valid_email_with_no_user(email, outcome):
-       with patch('src.util.helpers.DAO', autospec=True):
-              mockedDAO = MagicMock()
-              mockedDAO.find.return_value = outcome
-              uc = UserController(dao=mockedDAO)
-              with pytest.raises(Exception):
-                     assert uc.get_user_by_email(email) == outcome
+@pytest.mark.parametrize('email', [
+    "examplename.lastname@example.com"
+])
+def test_valid_email_with_no_user(email):
+    """
+    Tests get_user_by_email method for valid email but
+    no user found. It should return None.
+    """
+    # Set up mock DAO
+    with patch('src.util.helpers.DAO', autospec=True):
+        mockedDAO = MagicMock()
+        mockedDAO.find.return_value = []  # Simulate no user found
+        uc = UserController(dao=mockedDAO)
+        user = uc.get_user_by_email(email)
+        assert user is None
+
+
 
 # Test case for database fail
 def test_database_fail(email = "examplename.lastname@example.com"):
