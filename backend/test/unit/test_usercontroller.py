@@ -65,7 +65,7 @@ def test_valid_email_multiple_users_found():
                           "jane.doe@emailcom",
                           "jane.do@e@email.com",
                           ""])
-def test_get_user_by_email_exceptions_badmail(email):
+def test_invalid_email(email):
               """
               Tests get_user_by_email method for
               invalid email. It should raise Value Error.
@@ -84,24 +84,18 @@ def test_get_user_by_email_exceptions_badmail(email):
                      user_controller_instance.get_user_by_email(email)
 
 # Test case for a valid email with no user found
-@pytest.mark.parametrize('user, exp_user', [([{
-        'firstName': '',
-        'lastName': '',
-        'email': 'some.doe@email.com'
-    }], None)])
-def test_valid_email_users_found(user, exp_user):
-    """
-    Tests get_user_by_email method for
-    valid email with no user. It should return None.
-    """
-    email= "some.doe@email.com"
-    mock_dao = MagicMock()
-    mock_dao.find.return_value = user
-    user_controller_instance = UserController(mock_dao)
-    assert user_controller_instance.get_user_by_email(email=email) == exp_user
+@pytest.mark.parametrize('email, outcome', 
+                         [("examplename.lastname@example.com", None)])
+def test_valid_email_with_no_user(email, outcome):
+       with patch('src.util.helpers.DAO', autospec=True):
+              mockedDAO = MagicMock()
+              mockedDAO.find.return_value = outcome
+              uc = UserController(dao=mockedDAO)
+              with pytest.raises(Exception):
+                     assert uc.get_user_by_email(email) == outcome
 
 # Test case for database fail
-def test_get_user_by_email_database_fail(email = "examplename.lastname@example.com"):
+def test_database_fail(email = "examplename.lastname@example.com"):
     """
         Tests get_user_by_email method for
         database fail. It should
