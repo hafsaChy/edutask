@@ -74,25 +74,26 @@ def test_get_user_by_email_database_fail(email = "examplename.lastname@example.c
 
 
 
-def test_mongo_write_error():
+@pytest.fixture(scope='function', params=['user','task','todo','video'])
+def test_dao():
+       client = pymongo.MongoClient('mongodb://localhost:27017')
        dao = DAO('user')
-       with patch('src.util.dao.pymongo.MongoClient', autospec=True) as mockclientDB:
-              mock_db = MagicMock()
-              mockclientDB.return_value.edutask = mock_db
-              mock_collection = MagicMock()
-              mock_db.__getitem__.return_value = mock_collection
-              with pytest.raises(pymongo.errors.WriteError):
-                     dao.create({'notvalid': 'notvalid'})
-                     
 
-def test_mongo_write():
-       dao = DAO('user')
-       with patch('src.util.dao.pymongo.MongoClient', autospec=True) as mockclientDB:
-              mock_db = MagicMock()
-              mockclientDB.return_value.edutask = mock_db
-              mock_collection = MagicMock()
-              mock_db.__getitem__.return_value = mock_collection
-              assert dao.create({'firstName': 'example', 'lastName': 'example','email': 'example.adress@example.com'})
+       yield dao
+
+       client.close()
+       dao.drop()
+
+def test_mongo_write_error(test_dao):
+       dao = test_dao
+       with pytest.raises(pymongo.errors.WriteError):
+              dao.create({'notvalid': 'notvalid'})
+                     
+ # @pytest.mark.parametrize('validator', [{'firstName': 'example', 'lastName': 'example','email': 'example.adress@example.com'}, {
+    #   'title': 'example', 'description': 'example'},{'description': 'todoexample'},{'url': 'example'}])
+def test_mongo_write(test_dao):
+       dao = test_dao
+       assert dao.create({'firstName': 'example', 'lastName': 'example','email': 'example.adress@example.com'}) 
                      
 
 
