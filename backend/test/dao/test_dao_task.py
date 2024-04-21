@@ -137,11 +137,12 @@ def test_task_create_not_dup(test_dao):
     duplicate object should not have been created
     """
     dao = test_dao
+    dao.create(valid_obj_2)
     try:
         dao.create(valid_obj_2)
     except:
         pass
 
     count_users = dao.collection.count_documents(valid_obj_2)
-    assert count_users == 0
+    assert count_users == 1
 
