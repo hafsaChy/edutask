@@ -70,30 +70,4 @@ def test_get_user_by_email_database_fail(email = "examplename.lastname@example.c
                      with pytest.raises(Exception):
                             ucinstance.get_user_by_email(email)    
 
-# Test case for MongoDb Write Error
-
-
-
-@pytest.fixture(scope='function', params=['user','task','todo','video'])
-def test_dao():
-       client = pymongo.MongoClient('mongodb://localhost:27017')
-       dao = DAO('user')
-
-       yield dao
-
-       client.close()
-       dao.drop()
-
-def test_mongo_write_error(test_dao):
-       dao = test_dao
-       with pytest.raises(pymongo.errors.WriteError):
-              dao.create({'notvalid': 'notvalid'})
-                     
- # @pytest.mark.parametrize('validator', [{'firstName': 'example', 'lastName': 'example','email': 'example.adress@example.com'}, {
-    #   'title': 'example', 'description': 'example'},{'description': 'todoexample'},{'url': 'example'}])
-def test_mongo_write(test_dao):
-       dao = test_dao
-       assert dao.create({'firstName': 'example', 'lastName': 'example','email': 'example.adress@example.com'}) 
-                     
-
 

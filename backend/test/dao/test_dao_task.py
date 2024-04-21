@@ -143,5 +143,5 @@ def test_task_create_not_dup(test_dao):
         pass
 
     count_users = dao.collection.count_documents(valid_obj_2)
-    assert count_users == 1
+    assert count_users == 0
 

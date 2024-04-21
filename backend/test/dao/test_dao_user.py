@@ -138,6 +138,7 @@ def test_user_create_not_dup(test_dao):
     duplicate object should not be created
     """
     dao = test_dao
+    dao.create(valid_obj_2)
     try:
         dao.create(valid_obj_2)
     except:
