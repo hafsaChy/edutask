@@ -135,7 +135,7 @@ def test_user_create_dup_raise_error(test_dao):
 def test_user_create_not_dup(test_dao):
     """
     Tests create object with duplicate unique property,
-    duplicate object should not be created
+    duplicate object should not be created.
     """
     dao = test_dao
     dao.create(valid_obj_2)

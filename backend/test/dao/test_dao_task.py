@@ -58,8 +58,7 @@ def test_dao():
     ])
 def test_task_create_valid_returns_same_object(test_dao, new_obj):
     """
-        Tests valid scenarios when the
-        new object is registered to the database.
+        Tests create method with valid object.
         Should return newly created object.
     """
     dao = test_dao
@@ -75,7 +74,7 @@ def test_task_create_valid_returns_same_object(test_dao, new_obj):
     ])
 def test_task_invalid_obj_raise_error(test_dao, new_obj):
     """
-        Tests create object with invalid object,
+        Tests create method with invalid object,
         Should raise WriteError.
     """
     dao = test_dao
@@ -134,7 +133,7 @@ def test_task_create_dup_raise_error(test_dao):
 def test_task_create_not_dup(test_dao):
     """
     Tests create object with duplicate unique property,
-    duplicate object should not have been created
+    duplicate object should not be created.
     """
     dao = test_dao
     dao.create(valid_obj_2)
