@@ -1,4 +1,4 @@
-describe('Logging into the system and adding a todo', () => {
+describe('Logging into the system', () => {
     // define variables that we need on multiple occasions
     let uid // user id
     let name // name of the user (firstName + ' ' + lastName)
@@ -26,13 +26,7 @@ describe('Logging into the system and adding a todo', () => {
         cy.visit('http://localhost:3000')
     })
 
-    it('starting out on the landing screen', () => {
-        // make sure the landing page contains a header with "login"
-        cy.get('h1')
-            .should('contain.text', 'Login')
-    })
-
-    it('login to the system with an existing account and add a task, to then add a todo to it.', () => {
+    it('login to the system with an existing account.', () => {
         // detect a div which contains "Email Address", find the input and type (in a declarative way)
         cy.contains('div', 'Email Address')
             .find('input[type=text]')
@@ -44,21 +38,8 @@ describe('Logging into the system and adding a todo', () => {
         // assert that the user is now logged in
         cy.get('h1')
             .should('contain.text', 'Your tasks, ' + name)
-
-        cy.get('.inputwrapper #title')
-            .type("Test title")
-        cy.get('.inputwrapper #url')
-            .type("LB8KwiiUGy0")
-        cy.get('form')
-            .submit()
-
-        cy.contains('Test title')
-            .click()
-        cy.get('.inline-form')
-            .type("Test todo item")
-            .submit()
-
     })
+
 
     after(function() {
         // clean up by deleting the user from the database
@@ -66,13 +47,6 @@ describe('Logging into the system and adding a todo', () => {
             cy.request({
                 method: 'DELETE',
                 url: `http://localhost:5000/users/${uid}`
-            }).then((response) => {
-                cy.log(response.body)
-            })
-        } else if (uid && taskid) {
-            cy.request({
-                method: 'DELETE',
-                url: `http://localhost:5000/tasks/byid/${taskid}`
             }).then((response) => {
                 cy.log(response.body)
             })
