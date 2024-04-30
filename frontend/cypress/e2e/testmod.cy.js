@@ -75,12 +75,13 @@ describe('Adding a todo to an added task. .', () => {
         cy.contains('Test title')
             .click()
         cy.contains('Test todo item')
-            .get('.checker unchecked')
-            .click()
+            .get('.checker')
+            .click({ multiple: true })
 
         cy.contains("Test todo item")
-            .should('have.css', 'text-decoration', 'line-through')
-
+            .should(($element) => {
+                expect($element).to.have.css('text-decoration').match(/line-through/);
+            })
     })
 
     after(function() {
