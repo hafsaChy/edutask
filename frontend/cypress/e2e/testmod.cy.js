@@ -71,7 +71,7 @@ describe('Adding a todo to an added task. .', () => {
 
     })
 
-    it('The todo is struck through when the icon for doing it is clicked.', () => {
+    it('The todo is struck through when the icon for doing it is clicked, and the icon turns into a check mark.', () => {
         cy.contains('Test title')
             .click()
         cy.contains('Test todo item')
@@ -82,6 +82,12 @@ describe('Adding a todo to an added task. .', () => {
             .should(($element) => {
                 expect($element).to.have.css('text-decoration').match(/line-through/);
             })
+
+        cy.get('.checker')
+            .should('have.class', 'checked')
+
+
+
     })
 
     after(function() {
