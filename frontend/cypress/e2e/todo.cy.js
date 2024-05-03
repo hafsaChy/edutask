@@ -1,10 +1,8 @@
 const backend_url = `http://localhost:5000`
 
 describe('Todo', () => {
-    // define variables that we need on multiple occasions
-    let uid // user id
-    let email // email of the user
-    // let name // name of the user (firstName + ' ' + lastName)
+    let uid
+    let email
 
     beforeEach(function () {
         // create a fabricated user from a fixture then create task and after that create todo
@@ -19,8 +17,6 @@ describe('Todo', () => {
             .then((response) => {
                 uid = response.body._id.$oid
                 email = user.email
-                // name = user.firstName + ' ' + user.lastName
-
               })
               .then(() => {
                 cy.request({
@@ -37,17 +33,11 @@ describe('Todo', () => {
                 })
                 .then(() => {
                     cy.visit('http://localhost:3000/')
-                    // login
                     cy.contains('div', 'Email Address')
                         .find('input[type=text]')
                         .type(email)
                     cy.get('form')
-                    .submit()
-            
-                    // // assert that the user is now logged in
-                    // cy.get('h1')
-                    //     .should('contain.text', 'Your tasks, ' + name)
-            
+                    .submit()            
                     cy.get('.inputwrapper #title')
                         .type("Test title")
                     cy.get('.inputwrapper #url')
@@ -67,7 +57,6 @@ describe('Todo', () => {
 
 
     it('This test tests if beforeEach function creates user along with task and todo', () => {
-      // Assert the newly added to-do item
       cy.contains('.todo-item', 'Test todo item');
     });
 
@@ -83,7 +72,7 @@ describe('Todo', () => {
             .should('have.text', "This is another task")
     });
 
-    it('R8UC1 - Add button remains disable for no description', () => {
+    it('R8UC1 - Add button remains disabled for no description', () => {
       cy.get('.todo-list')
           .find('.inline-form input[type="text"]')
           .clear({force: true});
@@ -93,7 +82,7 @@ describe('Todo', () => {
           .should('be.disabled');
     });
   
-    it('R8UC1 - Add button does not remain disable for a description', () => {
+    it('R8UC1 - Add button does not remain disabled for a description', () => {
         cy.get('.todo-list')
             .find('.inline-form input[type="text"]')
             .type("This is another task", {force: true})
@@ -101,7 +90,7 @@ describe('Todo', () => {
             .should('not.be.disabled');
     });
 
-    it('R8UC2 - The todo is struck through when the icon infront of active item is clicked on, and the icon turns into a check mark.', () => {
+    it('R8UC2 - The todo is struck through when the icon infront of Active item is clicked on, and the icon turns into a check mark.', () => {
         cy.contains('Test todo item')
             .get('.checker')
             .click({ multiple: true });
@@ -117,7 +106,7 @@ describe('Todo', () => {
             .should('have.class', 'checked');
     });
 
-    it('R8UC2 - The todo is not strikethrough when the icon in front of done item is clicked on, and the check mark turns into a checker.', () => {
+    it('R8UC2 - The todo is not strikethrough when the icon in front of Done item is clicked on, and the check mark turns into a checker.', () => {
         cy.contains('Test todo item')
             .get('.checker')
             .click({ multiple: true });
@@ -142,7 +131,7 @@ describe('Todo', () => {
 
         cy.contains('.todo-item .editable', "Test todo")
             .parents('.todo-item')
-            .find('.remover') //find
+            .find('.remover')
             .click({ force: true });
 
         cy.wait('@delTodo').then(() => {
