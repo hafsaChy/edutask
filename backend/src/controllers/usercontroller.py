@@ -43,7 +43,7 @@ class UserController(Controller):
         except Exception as e:
             raise Exception('Error: Database operation failed')
 
-
+    # previous code
     # def get_user_by_email(self, email: str):
     #     """Given a valid email address of an existing account, return the user object contained in the database associated 
     #     to that user. For now, do not assume that the email attribute is unique. Additionally print a warning message containing the email
