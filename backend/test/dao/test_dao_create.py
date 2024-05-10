@@ -102,7 +102,7 @@ def test_create_invalid_obj_raise_error(sut, new_obj):
     (invalid_obj_2),
     (invalid_obj_3)
     ])
-def test_create_invalid_not_create(sut, new_obj):
+def test_create_invalid_obj_not_create(sut, new_obj):
     """
     Tests create object with invalid object,
     Object should not be created.
@@ -117,7 +117,7 @@ def test_create_invalid_not_create(sut, new_obj):
 
 
 @pytest.mark.integration
-def test_create_dup_raise_error(sut):
+def test_create_duplicate_raise_error(sut):
     """
     Tests create object with duplicate unique property,
     WriteError should be raised.
@@ -129,7 +129,7 @@ def test_create_dup_raise_error(sut):
 
 
 @pytest.mark.integration
-def test_create_create_not_dup(sut):
+def test_create_not_duplicate(sut):
     """
     Tests create object with duplicate unique property,
     duplicate object should not be created.
