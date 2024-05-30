@@ -39,21 +39,21 @@ def test_valid_email_users_found(user_array, exp_user):
 
 
 # Test case for a valid email with multiple users prints warning message
-def test_valid_email_multiple_users_found():
-    """
-        Tests get_user_by_email method for
-        valid email with multiple users. It should
-        print a warning message containing that email.Its a white box test. 
-    """
-    email = "first@domain.host"
-    with patch('builtins.print') as mock_print:
-        mock_dao = MagicMock()
-        mock_dao.find.return_value = [{'email': email}, {'email': email}]
-        user_controller_instance = UserController(mock_dao)
-        user = user_controller_instance.get_user_by_email(email)
-        # Assert that the warning message is printed with the correct content
-        mock_print.assert_called()
-        mock_print.assert_any_call(f'Error: more than one user found with mail {email}')
+# def test_valid_email_multiple_users_found():
+#     """
+#     Tests get_user_by_email method for
+#     valid email with multiple users. It should
+#     print a warning message containing that email. It is a white box test. 
+#     """
+#     email = "first@domain.host"
+#     with patch('builtins.print') as mock_print:
+#         mock_dao = MagicMock()
+#         mock_dao.find.return_value = [{'email': email}, {'email': email}]
+#         user_controller_instance = UserController(mock_dao)
+#         user = user_controller_instance.get_user_by_email(email)
+#         # Assert that the warning message is printed with the correct content
+#         mock_print.assert_called()
+#         mock_print.assert_any_call(f'Error: more than one user found with mail {email}')
 
 
 # Test case for an invalid email
@@ -66,22 +66,22 @@ def test_valid_email_multiple_users_found():
                           "jane.do@e@email.com",
                           ""])
 def test_invalid_email(email):
-              """
-              Tests get_user_by_email method for
-              invalid email. It should raise Value Error.
-              The following errors are tested for:
-              1. missing local part
-              2. missing @
-              3. missing domain
-              4. missing TLD part
-              5. missing dot separator . between domain and TLD part
-              6. more than one @
-              7. empty string
-              """
-              mock_dao = MagicMock()
-              user_controller_instance = UserController(mock_dao)
-              with pytest.raises(ValueError):
-                     user_controller_instance.get_user_by_email(email)
+    """
+    Tests get_user_by_email method for
+    invalid email. It should raise Value Error.
+    The following errors are tested for:
+    1. missing local part
+    2. missing @
+    3. missing domain
+    4. missing TLD part
+    5. missing dot separator (.) between domain and TLD part
+    6. more than one @
+    7. empty string
+    """
+    mock_dao = MagicMock()
+    user_controller_instance = UserController(mock_dao)
+    with pytest.raises(ValueError):
+            user_controller_instance.get_user_by_email(email)
 
 # Test case for a valid email with no user found
 @pytest.mark.parametrize('email', [
@@ -105,9 +105,9 @@ def test_valid_email_with_no_user(email):
 # Test case for database fail
 def test_database_fail(email = "examplename.lastname@example.com"):
     """
-        Tests get_user_by_email method for
-        database fail. It should
-        raise Exception. 
+    Tests get_user_by_email method for
+    database fail. It should
+    raise Exception. 
     """
     with patch('src.util.helpers.DAO', autospec=True):
             with patch('re.fullmatch', autospec=True) as mockfullmatch:

@@ -5,8 +5,6 @@ import pymongo
 import json
 from src.util.dao import DAO
 
-
-
 @pytest.fixture()
 def test_db():
     client = pymongo.MongoClient('mongodb://localhost:27017')
@@ -35,9 +33,9 @@ def sut(test_db):
         test_db.drop_collection('create_test')
 
 
-# includes only the required property
+# includes the required property
 valid_obj_1 = {
-    "email": "name@email.com"
+    "email": "name@email.com",
 }
 
 # includes required and optional properties
@@ -102,7 +100,7 @@ def test_create_invalid_obj_raise_error(sut, new_obj):
     (invalid_obj_2),
     (invalid_obj_3)
     ])
-def test_create_invalid_obj_not_create(sut, new_obj):
+def test_create_invalid_not_create(sut, new_obj):
     """
     Tests create object with invalid object,
     Object should not be created.
@@ -117,7 +115,7 @@ def test_create_invalid_obj_not_create(sut, new_obj):
 
 
 @pytest.mark.integration
-def test_create_duplicate_raise_error(sut):
+def test_create_dup_raise_error(sut):
     """
     Tests create object with duplicate unique property,
     WriteError should be raised.
@@ -129,7 +127,7 @@ def test_create_duplicate_raise_error(sut):
 
 
 @pytest.mark.integration
-def test_create_not_duplicate(sut):
+def test_create_create_not_dup(sut):
     """
     Tests create object with duplicate unique property,
     duplicate object should not be created.
